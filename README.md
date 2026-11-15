@@ -1,4 +1,4 @@
-This piece of code simulates Ollama server on the port 11434 and tricks most of the bots and even russian hackers that are using unsecures publicly available Ollama servers to boost thei autonomous agent used for hacking. Help protect the internet!
+This piece of code simulates Ollama server on the port 11434 and tricks most of the bots and even russian hackers that are using unsecures publicly available Ollama servers to boost their autonomous agent used for hacking. Help protect the internet!
 
 Launching :
 
