@@ -1,6 +1,6 @@
 This piece of code simulates Ollama server on the port 11434 and tricks most of the bots and even  hackers that are using unsecures publicly available Ollama servers to boost their autonomous agent used for hacking. 
 
-Help protect the internet! Run the fake Ollama and lure these mtfkrs
+Help protecting the internet! Run the fake Ollama and lure these mtfkrs
 
 Launching :
 
