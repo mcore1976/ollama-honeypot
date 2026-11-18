@@ -68,6 +68,7 @@ systemctl status ollama-honeypot
 4. check how it works
 
 ```bash
+sudo chown honeypot:honeypot /home/ollama-honeypot/nohup.out
 tail -f /home/ollama-honeypot/nohup.out
 tail -f /home/ollama-honeypot/ollama_honeypot.log
 ```
