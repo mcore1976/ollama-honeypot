@@ -15,7 +15,7 @@ python3 ollama-honeypot.py
 ```
 Logs will be visible in two places : ollama_honeypot.log  and   nohup.out
 
-The more safest approach on Linux Ubuntu :
+***The more safest approach on Linux Ubuntu :***
 
 1. Add new user with limited rights, add yourself to the same group. Copy the script to the home directory 
    
