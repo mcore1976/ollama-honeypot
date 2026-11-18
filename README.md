@@ -14,7 +14,7 @@ Logs will be visible in two places : ollama_honeypot.log  and   nohup.out
 
 The more safest approach on Linux Ubuntu :
 
-1. Add new user with limited rights, add yourself to the same group. Copy the script to the hoem directory 
+1. Add new user with limited rights, add yourself to the same group. Copy the script to the home directory 
    
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin honeypot
@@ -43,11 +43,9 @@ ExecStart=/usr/bin/python3 -u /home/ollama-honeypot/ollama-honeypot.py
 Restart=always
 RestartSec=5
 
-# Zapis wyjścia konsoli prosto do Twojego pliku nohup.out:
 StandardOutput=append:/home/ollama-honeypot/nohup.out
 StandardError=append:/home/ollama-honeypot/nohup.out
 
-# Izolacja bezpieczeństwa:
 NoNewPrivileges=true
 ProtectSystem=strict
 ReadWritePaths=/home/ollama-honeypot
@@ -56,4 +54,20 @@ ReadWritePaths=/home/ollama-honeypot
 WantedBy=multi-user.target
 EOF
 
+```
+
+3. Launch the service
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now ollama-honeypot
+sudo systemctl restart ollama-honeypot
+systemctl status ollama-honeypot
+```
+
+4. check how it works
+
+```bash
+tail -f /home/ollama-honeypot/nohup.out
+tail -f /home/ollama-honeypot/ollama_honeypot.log
 ```
