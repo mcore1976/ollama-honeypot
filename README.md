@@ -5,11 +5,14 @@ Help protecting the internet! Run the fake Ollama and lure these mtfkrs
 simplest launching :
 
 Linux : 
+```bash
  nohup python3 -u ollama-honeypot.py > nohup.out 2>&1 &
+```
 
 Windows:
+```bash
 python3 ollama-honeypot.py
-
+```
 Logs will be visible in two places : ollama_honeypot.log  and   nohup.out
 
 The more safest approach on Linux Ubuntu :
