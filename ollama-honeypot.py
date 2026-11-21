@@ -8,6 +8,15 @@ import traceback
 import threading
 from datetime import datetime, timedelta, timezone
 
+import builtins
+
+_oryginalny_print = builtins.print
+def print(*args, **kwargs):
+    znacznik = datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
+    kwargs.setdefault("flush", True)
+    _oryginalny_print(znacznik, *args, **kwargs)
+
+
 HOST = '0.0.0.0'
 PORT = 11434
 LOG_FILE = 'ollama_honeypot.log'
