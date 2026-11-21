@@ -545,10 +545,10 @@ def loguj_zdarzenie(ip, port, metoda, sciezka, naglowki_raw, body_raw, body_dict
             prompt_content = str(body_dict["input"])
         elif body_dict.get("model"):
             prompt_content = f"(POST bez treści, model: {model_name})"
-    if len(prompt_content) > 4000:
-        prompt_content = prompt_content[:4000] + "\n... [urwane]"
-    if body_raw and len(body_raw) > 4000:
-        body_raw = body_raw[:4000] + "\n... [urwane]"
+    if len(prompt_content) > 40000:
+        prompt_content = prompt_content[:40000] + "\n... [urwane]"
+    if body_raw and len(body_raw) > 40000:
+        body_raw = body_raw[:40000] + "\n... [urwane]"
     log_entry = (
         f"==================================================================\n"
         f"DATA: {znacznik_czasu}\n"
