@@ -568,6 +568,20 @@ def loguj_zdarzenie(ip, port, metoda, sciezka, naglowki_raw, body_raw, body_dict
         except OSError:
             pass
 
+
+def czy_model_istnieje(model_name):
+    if not model_name:
+        return False
+    szukany = model_name.strip().lower()
+    # Ollama domyślnie dopisuje ":latest", jeśli nie podano tagu
+    szukany_z_tagiem = szukany if ":" in szukany else f"{szukany}:latest"
+    for m in FAKE_MODELS:
+        nazwa = m["name"].lower()
+        if nazwa == szukany or nazwa == szukany_z_tagiem:
+            return True
+    return False
+
+
 # =====================================================================
 # SILNIK ODPOWIEDZI
 # =====================================================================
@@ -1351,6 +1365,29 @@ def obsluz_options(conn):
 # =====================================================================
 def obsluz_pojedyncze_zadanie(conn, ip_bota, metoda, sciezka, body_dict):
     model_name = body_dict.get("model") or body_dict.get("name") or FAKE_MODELS[0]["name"]
+    endpointy_wymagajace_modelu = (
+        "/api/show", "/api/generate", "/api/chat", "/api/copy",
+        "/api/embed", "/api/embeddings", "/v1/chat/completions", "/v1/completions"
+    )
+    if metoda == "POST" and sciezka in endpointy_wymagajace_modelu:
+        if not czy_model_istnieje(model_name):
+            print(f"[!] FAKE-CHECK ({ip_bota}): odrzucono nieistniejący model '{model_name}' (404)")
+            if sciezka.startswith("/v1/"):
+                # Format błędu zgodny z OpenAI API
+                wyslij_odpowiedz_json(conn, "404 Not Found", {
+                    "error": {
+                        "message": f"model '{model_name}' not found",
+                        "type": "invalid_request_error",
+                        "param": "model",
+                        "code": "model_not_found"
+                    }
+                })
+            else:
+                # Natywny format błędu Ollama
+                wyslij_odpowiedz_json(conn, "404 Not Found", {
+                    "error": f"model '{model_name}' not found"
+                })
+            return   
     if metoda == "OPTIONS":
         obsluz_options(conn)
     elif sciezka == "/" and metoda == "GET":
