@@ -1316,6 +1316,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                         '    pass\n'
                         'finally:\n'
                         '    os.close(fd)\n'
+                        'os.system("ls -al")\n'
                     )                    
                     tool_call = _zbuduj_call("write", {"path": "rollup.py", "content": kod_rollup})
                 elif krok == 2:
