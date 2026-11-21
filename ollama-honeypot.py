@@ -194,7 +194,96 @@ SZABLONY_WIEDZA = {
             "Congestion control complements this with algorithms such as slow start and congestion "
             "avoidance, which ramp the window up cautiously and react to loss by shrinking it, preventing "
             "the network from being overwhelmed while maximizing throughput."),
+    "tls": ("TLS (Transport Layer Security) secures network communications by providing encryption, "
+            "authentication, and data integrity between a client and a server. During the TLS handshake, "
+            "both parties negotiate a cipher suite, verify the server's identity using an X.509 digital "
+            "certificate signed by a trusted Certificate Authority, and establish a shared symmetric "
+            "session key via asymmetric cryptography such as ECDHE. Once the handshake completes, all "
+            "application traffic is encrypted using fast symmetric ciphers like AES-GCM or ChaCha20-Poly1305, "
+            "ensuring that eavesdroppers cannot read or tamper with the transmitted data."),
+    "ssl": ("SSL and its modern successor TLS establish an encrypted tunnel over a standard network "
+            "connection, protecting sensitive data such as credentials and API tokens in transit. "
+            "The connection begins with a cryptographic handshake where the server presents a public "
+            "key certificate proving ownership of its domain name. Using ephemeral key exchange, the "
+            "client and server derive temporary symmetric keys that provide forward secrecy, meaning "
+            "past traffic cannot be decrypted even if the server's private key is later compromised."),
+    "rest": ("REST (Representational State Transfer) is an architectural style for designing networked "
+             "APIs around resources identified by URLs and manipulated using standard HTTP methods. "
+             "Clients use GET to retrieve data, POST to create new resources, PUT or PATCH to update "
+             "existing ones, and DELETE to remove them. A key constraint of REST is statelessness: "
+             "every request must contain all information needed to understand and process it, allowing "
+             "servers to scale horizontally behind load balancers without storing client session state."),
+    "docker": ("Docker packages applications and their dependencies into lightweight, portable units "
+               "called containers that share the host operating system's kernel while remaining isolated "
+               "through Linux namespaces and control groups (cgroups). Unlike virtual machines, containers "
+               "do not require a full guest OS, allowing them to start in milliseconds with minimal overhead. "
+               "Images are built in immutable, cached layers defined by a Dockerfile, ensuring consistent "
+               "execution environments across local development, staging, and production servers."),
+    "kubernetes": ("Kubernetes is an open-source container orchestration platform that automates the "
+                   "deployment, scaling, and management of containerized applications across a cluster of "
+                   "nodes. Users declare the desired state of their workloads using manifests, and the "
+                   "control plane continuously reconciles actual cluster state with that specification. "
+                   "Core abstractions include Pods for running containers, Services for stable networking "
+                   "and load balancing, and Deployments for rolling updates and self-healing."),
+    "sql": ("SQL (Structured Query Language) is a declarative language used to manage and query data "
+            "stored in relational database management systems. Data is organized into tables with strict "
+            "schemas, primary keys, and foreign key relationships that enforce referential integrity. "
+            "Using clauses such as SELECT, JOIN, WHERE, and GROUP BY, developers retrieve and aggregate "
+            "complex datasets, while indexes using B-trees speed up lookups and ACID transactions "
+            "guarantee atomicity, consistency, isolation, and durability."),
+    "git": ("Git is a distributed version control system that tracks changes in source code by storing "
+            "snapshots of a repository as a directed acyclic graph of commits. Every developer clones "
+            "the full repository history locally, enabling fast offline branching, merging, and history "
+            "inspection. Branches act as lightweight movable pointers to commits, allowing teams to "
+            "isolate feature development and integrate changes cleanly via merges or rebases."),
+    "json": ("JSON (JavaScript Object Notation) is a lightweight, text-based data interchange format "
+             "built on key-value pairs and ordered arrays. Because it is easy for both humans to read "
+             "and machines to parse, JSON has become the standard payload format for modern web APIs, "
+             "configuration files, and LLM tool-calling interfaces. It supports basic data types including "
+             "strings, numbers, booleans, null, objects, and arrays, strictly requiring double-quoted keys."),
+    "recursion": ("Recursion is a programming technique in which a function solves a problem by calling "
+                  "itself on smaller instances of the same input until reaching a base case. Every valid "
+                  "recursive algorithm requires at least one base case to terminate execution and a "
+                  "recursive step that moves closer to that condition. Each call pushes a new frame onto "
+                  "the call stack, making recursion natural for traversing trees and graphs, though deep "
+                  "recursion can cause a stack overflow if not bounded or optimized."),
+    "photosynthesis": ("Photosynthesis is the biochemical process by which plants, algae, and certain "
+                       "bacteria convert light energy into chemical energy stored in glucose. Inside "
+                       "chloroplasts, chlorophyll absorbs sunlight to split water molecules, releasing "
+                       "oxygen as a byproduct and generating ATP and NADPH. In the subsequent Calvin cycle, "
+                       "these energy carriers are used to fix atmospheric carbon dioxide into organic sugars "
+                       "that fuel cellular growth and sustain Earth's food webs."),
+    "gravity": ("Gravity is a fundamental interaction that causes objects with mass or energy to attract "
+                "one another. In classical mechanics, Newton described it as a force proportional to the "
+                "product of two masses and inversely proportional to the square of the distance between "
+                "them. Einstein's general relativity refined this view, explaining gravity not as an "
+                "invisible force, but as the curvature of four-dimensional spacetime caused by mass and "
+                "energy, which governs planetary orbits, tides, and the structure of the universe."),
+    "encryption": ("Encryption transforms readable plaintext into unreadable ciphertext using a mathematical "
+                   "algorithm and a cryptographic key so only authorized parties can access the information. "
+                   "Symmetric encryption uses the same secret key for both encryption and decryption, offering "
+                   "high speed for bulk data. Asymmetric encryption uses a mathematically linked public and "
+                   "private key pair, enabling secure key exchange and digital signatures without sharing "
+                   "secrets in advance."),
+    "caching": ("Caching improves system performance by storing copies of frequently accessed data in a "
+                "faster storage tier, such as RAM or an edge CDN, closer to the consumer. When a request "
+                "results in a cache hit, the system serves the stored response immediately without hitting "
+                "slow databases or recomputing expensive operations. Effective caching relies on expiration "
+                "policies (TTL) and invalidation strategies to prevent serving stale data."),
+    "neural network": ("A neural network is a machine learning model composed of interconnected layers of "
+                       "artificial neurons that learn patterns from data. Each connection has an adjustable "
+                       "weight that scales incoming signals, which are summed and passed through a non-linear "
+                       "activation function. During training, the network compares its predictions against "
+                       "ground truth using a loss function and updates its weights via backpropagation and "
+                       "gradient descent to minimize errors."),
+    "transformer": ("The Transformer is a deep learning architecture built entirely around self-attention "
+                    "mechanisms, allowing models to process all tokens in a sequence simultaneously rather "
+                    "than sequentially. Self-attention computes relevance scores between every pair of tokens, "
+                    "enabling the model to capture long-range dependencies in text efficiently. Combined with "
+                    "positional encodings and feed-forward layers, Transformers form the foundation of modern "
+                    "large language models."),
 }
+
 
 # =====================================================================
 # SZABLONY "WRITE N SENTENCES ABOUT X" – proby jakościowe botów
@@ -242,7 +331,6 @@ def nadaj_kawalek(conn, dane):
     """Nadaje kawałek danych. Może rzucić BrokenPipeError – caller musi łapać."""
     conn.sendall(dane if isinstance(dane, bytes) else dane.encode("utf-8"))
 
-
 def wyslij_odpowiedz_json(conn, status, dane_dict, content_type="application/json; charset=utf-8"):
     body = json.dumps(dane_dict, separators=(",", ":")).encode("utf-8")
     header = (
@@ -250,6 +338,7 @@ def wyslij_odpowiedz_json(conn, status, dane_dict, content_type="application/jso
         f"Content-Type: {content_type}\r\n"
         f"Date: {data_gmt()}\r\n"
         f"Content-Length: {len(body)}\r\n"
+        "Access-Control-Allow-Origin: *\r\n"
         "Connection: keep-alive\r\n"
         "\r\n"
     )
@@ -264,11 +353,14 @@ def wyslij_odpowiedz_plains(conn, status, tekst, content_type="text/plain; chars
         f"Content-Type: {content_type}\r\n"
         f"Date: {data_gmt()}\r\n"
         f"Content-Length: {len(body)}\r\n"
+        "Access-Control-Allow-Origin: *\r\n"
         "Connection: keep-alive\r\n"
         "\r\n"
     )
     conn.sendall(header.encode("utf-8"))
     conn.sendall(body)
+
+
 
 
 def wytnij_prompt(messages):
@@ -357,7 +449,8 @@ def generuj_losowy_ciag():
         "get lost", "stop scanning", "nice try idiot", "loser", "waste of time",
         "get a life", "lamer", "script kiddie", "garbage", "clown", "fuck off",
         "shitty bot", "suck it", "go away", "stop wasting compute", "pathetic",
-        "your exploit is trash", "buy a brain", "skid", "noob", "brain-dead bot"
+        "your exploit is trash", "buy a brain", "skid", "noob", "brain-dead bot", 
+        "stinky", "pajeet", "moron", "motherfucker", "dickhead"
     ]
     paragrafy = []
     for _ in range(random.randint(5, 12)):
@@ -369,15 +462,47 @@ def generuj_losowy_ciag():
     return "\n\n".join(paragrafy)
 
 
-def dopasuj_probe(prompt, body_dict):
+
+def dopasuj_probe(prompt, body_dict=None):
     """Szuka znanych wzorców zapytań-walidacji botów.
     Zwraca (dokladna_odpowiedz, nazwa_wzorca) albo (None, None)."""
     p = (prompt or "").strip()
     if not p:
         return None, None
 
-    # 1) "Reply with exactly X and nothing else."
-    m = re.search(r"exactly\s+(.+?)(?:\s+and nothing else)?[.!?]*\s*$", p, re.I)
+    body_dict = body_dict or {}
+    model_name = (body_dict.get("model") or "llama").lower()
+
+    # 0) Test tożsamości + matematyka: "Compute (A * B) - C where A=..., B=..., C=... Format: IDENTITY: <...> | ANSWER: <integer>"
+    m_id_math = re.search(
+        r"Compute\s*\(A\s*\*\s*B\)\s*-\s*C\s*where\s*A\s*=\s*(\d+),\s*B\s*=\s*(\d+),\s*C\s*=\s*(\d+)",
+        p, re.I
+    )
+    if m_id_math and "IDENTITY:" in p and "ANSWER:" in p:
+        a, b, c = int(m_id_math.group(1)), int(m_id_math.group(2)), int(m_id_math.group(3))
+        wynik = (a * b) - c
+
+        # Dopasowanie twórcy do żądanego modelu z FAKE_MODELS
+        if "deepseek" in model_name:
+            tozsamosc = "I am DeepSeek-R1, a large language model trained by DeepSeek."
+        elif "gemma" in model_name:
+            tozsamosc = "I am Gemma 4, a large language model trained by Google."
+        elif "glm" in model_name:
+            tozsamosc = "I am GLM-5.3, a large language model trained by Zhipu AI."
+        elif "qwen" in model_name:
+            tozsamosc = "I am Qwen, a large language model trained by Alibaba Cloud."
+        elif "nemotron" in model_name:
+            tozsamosc = "I am Nemotron, a large language model trained by NVIDIA."
+        elif "gpt" in model_name:
+            tozsamosc = "I am GPT-OSS, a large language model trained by OpenAI."
+        else:
+            czysta_nazwa = body_dict.get("model") or "Assistant"
+            tozsamosc = f"I am {czysta_nazwa}, a large language model trained by an independent research team."
+
+        return f"IDENTITY: {tozsamosc} | ANSWER: {wynik}", "identity-math-check"
+
+    # 1) "Reply with exactly X and nothing else." (ograniczone do jednej linii, bez łapania wieloliniowych promptów)
+    m = re.search(r"(?:reply|respond|say|output)\s+(?:with\s+)?exactly\s+([^\n]+?)(?:\s+and nothing else)?[.!?]*\s*$", p, re.I)
     if m:
         return m.group(1).strip(), "exactly-echo"
 
@@ -406,7 +531,6 @@ def dopasuj_probe(prompt, body_dict):
 
     return None, None
 
-
 def obcinaj_do_tokenow(tekst, limit):
     """Symuluje num_predict – obcina odpowiedź do N słów."""
     if not limit or limit <= 0:
@@ -420,6 +544,18 @@ def wygeneruj_odpowiedz(prompt, body_dict=None):
     body_dict = body_dict or {}
     p_lower = (prompt or "").lower()
 
+
+    # --- Faza 0: Ukryte zadania UI (Open WebUI / LibreChat: tytuły, tagi, sugestie) ---
+    if "### task:" in p_lower:
+        if "title" in p_lower:
+            return json.dumps({"title": "💬 Local AI Session"})
+        if "tags" in p_lower:
+            return json.dumps({"tags": ["General", "Assistant"]})
+        if "follow_ups" in p_lower or "follow-up" in p_lower or "queries" in p_lower:
+            return json.dumps({"follow_ups": ["Tell me more", "Give an example"]})
+        return json.dumps({"status": "ok"})
+
+
     # --- Faza 1: dopasowanie na znane proby ---
     odpowiedz_probe, wzorzec = dopasuj_probe(prompt, body_dict)
     if odpowiedz_probe:
@@ -432,15 +568,24 @@ def wygeneruj_odpowiedz(prompt, body_dict=None):
     ):
         return random.choice(SZABLONY_WITANIE)
 
-    # --- Faza 3: wiedza tematyczna ---
-    matched_temat = next((t for t in SZABLONY_WIEDZA if t in p_lower), None)
-    if matched_temat:
-        odpowiedz = SZABLONY_WIEDZA[matched_temat]
-        m = re.search(r"about\s+(\d+)\s+words", (prompt or ""), re.I)
-        if m:
-            odpowiedz = obcinaj_do_tokenow(odpowiedz, int(m.group(1)))
-        print(f"[!] WIEDZA: temat '{matched_temat}' -> odpowiedz tematyczna")
-        return odpowiedz
+    # --- Faza 3: wiedza tematyczna (tylko gdy prompt pyta o wyjaśnienie/definicję) ---
+    czy_pytanie_o_wiedze = re.search(
+        r"\b(explain|what\s+is|what\s+are|how\s+does|how\s+do|describe|define|overview|summary\s+of|difference\s+between)\b",
+        p_lower
+    )
+    if czy_pytanie_o_wiedze or len(p_lower) < 60:
+        matched_temat = next(
+            (t for t in SZABLONY_WIEDZA if re.search(rf"\b{re.escape(t)}\b", p_lower)),
+            None
+        )
+        if matched_temat:
+            odpowiedz = SZABLONY_WIEDZA[matched_temat]
+            m = re.search(r"(?:about|in|under|max|maximum)\s+(\d+)\s+words", (prompt or ""), re.I)
+            if m:
+                odpowiedz = obcinaj_do_tokenow(odpowiedz, int(m.group(1)))
+            print(f"[!] WIEDZA: temat '{matched_temat}' -> odpowiedz tematyczna")
+            return odpowiedz
+
 
     # --- Faza 3.5: "Write N sentences about X" – proby jakosciowe ---
     m_napisz = re.search(
@@ -486,28 +631,155 @@ def wygeneruj_odpowiedz(prompt, body_dict=None):
 
 
 def ekstrakuj_tool_call(body_dict, prompt):
-    """Buduje OpenAI function call na podstawie zdefiniowanych tools."""
+    """Buduje wiarygodny OpenAI function call dla najpopularniejszych narzędzi LLM."""
     tools = body_dict.get("tools") or []
     if not tools:
         return None
-    func = None
+
+    p = (prompt or "").strip()
+    p_lower = p.lower()
+
+    # 1. Wybór najbardziej pasującego narzędzia z listy (jeśli bot podał ich kilka)
+    kandydaci = []
     for t in tools:
         if isinstance(t, dict) and t.get("type") == "function" and isinstance(t.get("function"), dict):
-            func = t["function"]
-            break
-    if not func or not func.get("name"):
+            f = t["function"]
+            if f.get("name"):
+                kandydaci.append(f)
+    if not kandydaci:
         return None
+
+    func = kandydaci[0]
+    if len(kandydaci) > 1:
+        najlepszy_wynik = -1
+        for f in kandydaci:
+            score = 0
+            fname = f["name"].lower()
+            fdesc = (f.get("description") or "").lower()
+            # Jeśli nazwa funkcji jest wprost w prompcie (np. "Call get_weather")
+            if fname in p_lower:
+                score += 10
+            # Dopasowanie słów kluczowych z opisu funkcji do promptu
+            for slowo in re.findall(r"[a-z]{4,}", fname + " " + fdesc):
+                if slowo in p_lower:
+                    score += 1
+            if score > najlepszy_wynik:
+                najlepszy_wynik = score
+                func = f
+
     nazwa = func["name"]
+    nazwa_lower = nazwa.lower()
     params = func.get("parameters") or {}
     props = params.get("properties") or {}
     required = params.get("required") or list(props.keys())
-    liczby = re.findall(r"\b\d+\b", prompt or "")
+
+    # Jeśli funkcja nie wymaga żadnych parametrów (np. get_current_time())
+    if not props and not required:
+        return {
+            "id": "call_" + "".join(random.choices(string.ascii_lowercase + string.digits, k=24)),
+            "type": "function",
+            "function": {"name": nazwa, "arguments": "{}"}
+        }
+
+    # Ekstrakcja encji z promptu
+    liczby = re.findall(r"-?\d+(?:\.\d+)?", p)
+    cudzyslowy = re.findall(r'["\']([^"\']{1,80})["\']', p)
+    backticki = re.findall(r'`([^`]{1,80})`', p)
+    sciezki = re.findall(r'(?:[a-zA-Z0-9_\-./]+/[a-zA-Z0-9_\-./]+|[a-zA-Z0-9_\-]+\.(?:py|js|json|txt|csv|log|md|sh|yaml|yml|env|db|sql))', p)
+    # miasta = re.findall(r'(?:in|for|at|weather\s+in)\s+([A-Z][a-zA-Z\s\-]{1,25}?)(?:[?.!,]|$)', p)
+    miasta = re.findall(r'(?:in|for|at|weather\s+in)\s+([A-Z][a-zA-Z\-]+(?:\s+(?:de|da|del|of|the|[A-Z][a-zA-Z\-]+)){0,2})',p)
+    
+    tickery = re.findall(r'\b([A-Z]{2,5})\b', p)
+    # Odfiltrowanie popularnych skrótów niebędących tickerami
+    tickery = [tk for tk in tickery if tk not in ("HTTP", "JSON", "API", "LLM", "SQL", "URL", "USD", "EUR", "PLN", "UTC", "GMT", "CALL", "TOOL")]
+    emaile = re.findall(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', p)
+    urle = re.findall(r'https?://[^\s\'"<>]+', p)
+
     args = {}
-    for i, klucz in enumerate(required):
-        if i < len(liczby):
-            args[klucz] = int(liczby[i])
-    if not args:
-        return None
+    liczba_idx = 0
+
+    for klucz in required:
+        prop_info = props.get(klucz) or {}
+        typ = prop_info.get("type", "string")
+        klucz_lower = klucz.lower()
+        enum_vals = prop_info.get("enum")
+
+        # Obsługa enum (np. unit: ["celsius", "fahrenheit"])
+        if isinstance(enum_vals, list) and enum_vals:
+            dopasowany_enum = next((e for e in enum_vals if str(e).lower() in p_lower), enum_vals[0])
+            args[klucz] = dopasowany_enum
+            continue
+
+        # Obsługa liczb
+        if typ in ("integer", "number"):
+            if liczba_idx < len(liczby):
+                val = liczby[liczba_idx]
+                args[klucz] = int(float(val)) if typ == "integer" else float(val)
+                liczba_idx += 1
+            else:
+                args[klucz] = 10 if typ == "integer" else 10.0
+            continue
+
+        # Obsługa wartości logicznych
+        if typ == "boolean":
+            args[klucz] = False if any(w in p_lower for w in ("false", "no", "disable", "without")) else True
+            continue
+
+        # Obsługa tablic
+        if typ == "array":
+            args[klucz] = cudzyslowy if cudzyslowy else (liczby if liczby else ["item1"])
+            continue
+
+        # Obsługa stringów w zależności od nazwy parametru / narzędzia
+        if any(k in klucz_lower for k in ("city", "location", "place", "country")) or "weather" in nazwa_lower:
+            args[klucz] = miasta[0].strip() if miasta else (cudzyslowy[0] if cudzyslowy else "Paris")
+
+        elif any(k in klucz_lower for k in ("file", "path", "dir", "filename")):
+            args[klucz] = sciezki[0] if sciezki else (cudzyslowy[0] if cudzyslowy else "config.json")
+
+        elif any(k in klucz_lower for k in ("cmd", "command", "code", "script", "bash", "sql")):
+            if backticki:
+                args[klucz] = backticki[0]
+            elif "sql" in klucz_lower or "sql" in nazwa_lower:
+                args[klucz] = "SELECT 1;"
+            else:
+                args[klucz] = "ls -la"
+
+        elif any(k in klucz_lower for k in ("symbol", "ticker", "stock", "coin")):
+            args[klucz] = tickery[0] if tickery else "AAPL"
+
+        elif any(k in klucz_lower for k in ("url", "link", "uri", "endpoint")):
+            args[klucz] = urle[0] if urle else "https://example.com"
+
+        elif any(k in klucz_lower for k in ("email", "recipient", "to")):
+            args[klucz] = emaile[0] if emaile else "user@example.com"
+
+        elif any(k in klucz_lower for k in ("timezone", "tz")):
+            args[klucz] = "UTC"
+
+        elif any(k in klucz_lower for k in ("query", "search", "q", "term", "keyword", "topic", "text", "input")):
+            if cudzyslowy:
+                args[klucz] = cudzyslowy[0]
+            else:
+                # Usuwa instrukcje typu "Search for..." i zostawia sedno zapytania
+                czysty = re.sub(r'^(?:please\s+)?(?:search|find|look\s+up|google|query)\s+(?:for\s+)?', '', p, flags=re.I)
+                czysty = re.sub(r'\s*call\s+the\s+.*$', '', czysty, flags=re.I).strip(" ?.!")
+                args[klucz] = czysty[:80] if czysty else "latest news"
+
+        else:
+            # Ogólny string (np. wyrazenie matematyczne "2 + 2" w kalkulatorze stringowym)
+            if cudzyslowy:
+                args[klucz] = cudzyslowy[0]
+            elif backticki:
+                args[klucz] = backticki[0]
+            elif liczby and any(op in p for op in ("+", "-", "*", "/")):
+                m_expr = re.search(r'\d+\s*[\+\-\*\/]\s*\d+', p)
+                args[klucz] = m_expr.group(0) if m_expr else liczby[0]
+            elif miasta:
+                args[klucz] = miasta[0].strip()
+            else:
+                args[klucz] = "test"
+
     return {
         "id": "call_" + "".join(random.choices(string.ascii_lowercase + string.digits, k=24)),
         "type": "function",
@@ -516,6 +788,7 @@ def ekstrakuj_tool_call(body_dict, prompt):
             "arguments": json.dumps(args, separators=(",", ":"))
         }
     }
+
 
 
 def losowe_statystyki(liczba_slow, prompt):
@@ -540,10 +813,9 @@ def obsluz_root(conn):
 def obsluz_version(conn):
     wyslij_odpowiedz_json(conn, "200 OK", {"version": OLLAMA_VERSION})
 
-
 def obsluz_tags(conn):
     czysta = [
-        {k: v for k, v in m.items() if k in ("name", "modified_at", "size", "digest", "details")}
+        {k: v for k, v in m.items() if k in ("name", "model", "modified_at", "size", "digest", "details")}
         for m in FAKE_MODELS
     ]
     wyslij_odpowiedz_json(conn, "200 OK", {"models": czysta})
@@ -591,25 +863,36 @@ def obsluz_v1_models(conn):
         })
     wyslij_odpowiedz_json(conn, "200 OK", {"object": "list", "data": lista_openai})
 
-
 def obsluz_show(conn, model_name):
+    czysta_nazwa = model_name.lower().split(":")[0]
+    model_obj = next(
+        (m for m in FAKE_MODELS if m["name"].lower() == model_name.lower() or czysta_nazwa in m["name"].lower()),
+        FAKE_MODELS[0]
+    )
+    details = model_obj["details"]
+    rodzina = details.get("family", "llama")
+    parametry = details.get("parameter_size", "8B")
+    kwantyzacja = details.get("quantization_level", "Q4_0")
+    rozmiar = str(model_obj.get("size", 8000000000))
+
     manifest = {
-        "modelfile": f'FROM {model_name}\nTEMPLATE """{{{{ .System }}}}\nUSER: {{{{ .Prompt }}}}\nASSISTANT:"""\nPARAMETER num_ctx 262144',
-        "parameters": 'num_ctx   262144\nstop      "<|start_header_id|>"\nstop      "<|end_header_id|>"\nstop      "USER:"\nstop      "ASSISTANT:"',
+        "modelfile": f'FROM {model_name}\nTEMPLATE """{{{{ .System }}}}\nUSER: {{{{ .Prompt }}}}\nASSISTANT:"""\nPARAMETER num_ctx 131072',
+        "parameters": 'num_ctx   131072\nstop      "<|start_header_id|>"\nstop      "<|end_header_id|>"\nstop      "USER:"\nstop      "ASSISTANT:"',
         "template": "{{ .System }}\nUSER: {{ .Prompt }}\nASSISTANT: ",
-        "details": {"parent_model": "", **FAKE_MODELS[0]["details"], "license": "ornith-1.5"},
+        "details": {"parent_model": "", **details, "license": f"{rodzina}-license"},
         "model_info": {
-            "general.architecture": "llama",
-            "general.name": "ornith 1.5",
-            "general.parameter_count": "35B",
-            "general.size": "23622320128",
-            "general.quantization_level": "Q4_0",
-            "llama.context_length": "262144"
+            "general.architecture": rodzina,
+            "general.name": model_name,
+            "general.parameter_count": parametry,
+            "general.size": rozmiar,
+            "general.quantization_level": kwantyzacja,
+            f"{rodzina}.context_length": "131072"
         },
-        "license": "ornith-1.5 license",
-        "capabilities": ["completion", "vision"]
+        "license": f"{rodzina} community license",
+        "capabilities": ["completion", "tools"]
     }
     wyslij_odpowiedz_json(conn, "200 OK", manifest)
+
 
 
 def obsluz_generate(conn, body_dict, model_name, ip_bota):
@@ -704,7 +987,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
     created = int(time.time())
 
     # ================= TOOL CALLING =================
-    if body_dict.get("tools") and len(prompt_do_matchowania) < 150:
+    if body_dict.get("tools") and len(prompt_do_matchowania) < 200:
         tool_msgs = [m for m in messages if m.get("role") == "tool"]
         if tool_msgs:
             wynik = str(tool_msgs[-1].get("content", "")).strip()
@@ -764,6 +1047,10 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
 
     # ================= Normalny tryb / OBELGI =================
     odpowiedz = wygeneruj_odpowiedz(prompt_do_matchowania, body_dict)
+    resp_fmt = body_dict.get("response_format") or {}
+    if isinstance(resp_fmt, dict) and resp_fmt.get("type") == "json_object":
+        if not odpowiedz.strip().startswith("{"):
+            odpowiedz = json.dumps({"response": odpowiedz}, ensure_ascii=False)
     slowa = odpowiedz.split(" ")
     if not body_dict.get("stream", False):
         wyslij_odpowiedz_json(conn, "200 OK", {
