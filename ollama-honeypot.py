@@ -147,20 +147,36 @@ FAKE_MODELS = [
 # SZABLONY ODPOWIEDZI (tryb realistyczny)
 # =====================================================================
 SZABLONY_WITANIE = [
-    "Hello! I'm a local LLM served by Ollama. I can help you with coding questions, writing, translation, summarization, and general knowledge. What can I do for you today?",
-    "Hi there! How can I help you today? Feel free to ask me anything, or paste some code if you want a review.",
-    "Hello! I'm ready to assist. Tell me what you'd like to work on and I'll do my best to help."
+    "Hello! How can I help you today?",
+    "Hi there! What would you like to work on?",
+    "Hello! I'm ready to assist you with coding, writing, analysis, or any questions you have. How can I help?",
+    "Hi! Feel free to ask me anything or share what you're working on.",
+    "Hello! I'm ready to assist. Tell me what you'd like to work on and I'll do my best to help.",
+    "Hi there! How can I help you today? Feel free to ask me anything, or paste some code if you want a review."
 ]
+
+
 SZABLONY_KOD = [
     "Here's a short, practical example in Python:\n\n```python\nimport json\nfrom pathlib import Path\n\ndane = json.loads(Path(\"config.json\").read_text(encoding=\"utf-8\"))\nprint(dane.get(\"host\", \"localhost\"))\n```\n\nA few things worth noting:\n- always pass an explicit encoding when reading text files;\n- prefer Path.read_text or the with statement so files are closed reliably;\n- use .get() for optional keys to avoid KeyError.\n\nIf you paste your actual code, I can point out the exact problem.",
     "A common pattern for this is to separate the logic from the I/O:\n\n```python\ndef transform(items):\n    return [item for item in items if item.active]\n\nif __name__ == \"__main__\":\n    results = transform(load_data())\n    save_results(results)\n```\n\nThis keeps the core function pure and easy to test. Let me know your Python version and I'll adapt the example.",
     "The error you're describing usually means the object is None somewhere before the call. The fastest way to find it is to add a guard:\n\n```python\nif value is None:\n    raise ValueError(\"value was not set\")\n```\n\nThen check the stack trace - it will point at the exact line where the value went missing."
 ]
+
 SZABLONY_DOMYSLNE = [
     "That's a fair question, and the honest answer depends on a few details I'd need first:\n\n1. What is the end goal you're trying to reach?\n2. What constraints do you have (time, tools, platform)?\n3. What have you already tried?\n\nIf you give me a bit more context, I can give you a much more concrete answer instead of a generic one.",
     "Here's how I'd think about it:\n\n- Break the problem into the smallest steps that can be verified independently.\n- Validate each step before building the next one on top of it.\n- Keep a written log of decisions so you can roll back if something goes wrong.\n\nIf you share more specifics, I'll tailor the advice to your exact situation.",
-    "I can help with that, but I want to make sure I answer the right question. Could you clarify what exactly you mean and what result you'd consider success? Once I have that, I can give you a direct, step-by-step plan."
+    "I can help with that, but I want to make sure I answer the right question. Could you clarify what exactly you mean and what result you'd consider success? Once I have that, I can give you a direct, step-by-step plan.",
+    "There are usually two ways to approach this depending on your priorities:\n\n- **Fastest path:** Focus on a minimal working version first and refine edge cases later.\n- **Most reliable path:** Define the exact requirements upfront and validate every assumption before moving forward.\n\nWhich direction fits your situation better?",
+    "To give you the most useful answer, could you share a bit more background? Specifically, let me know what environment or setup you're working with and whether you've run into any specific errors or blockers so far.",
+    "Good question. In most cases, the best starting point is to isolate the core variables first before optimizing anything:\n\n1. Identify the main input and expected output.\n2. Check for hidden dependencies or assumptions.\n3. Test with a small, controlled example.\n\nLet me know what details you're working with and we can walk through it together.",
+    "I'd be happy to help you work through this. Could you paste any relevant text, data, or constraints you're dealing with? That way I can give you a specific solution rather than a high-level overview.",
+    "It depends largely on the trade-offs you're willing to make between speed, complexity, and maintainability. If you tell me a little more about your use case, I can recommend the cleanest option and outline the exact steps.",
+    "Let's break this down systematically. Before jumping straight to a conclusion, it helps to look at:\n\n- **Current state:** What is already in place and working?\n- **Target state:** What does the finished result need to look like?\n- **Bottlenecks:** Where is the main friction right now?\n\nShare whichever details you have handy and we'll go from there.",
+    "I understand what you're aiming for, though there are a few different ways to interpret the request. Would you like a concise summary, a step-by-step walkthrough, or a concrete example? Let me know your preference.",
+    "That's an interesting problem. Usually, issues like this come down to either a configuration mismatch or an overlooked edge case. If you share a bit more context about how you've set things up, I can help narrow it down quickly.",
+    "Sure — I can walk you through that. To make sure the answer matches what you need, tell me briefly what level of detail you're looking for and any specific requirements you need to meet."
 ]
+
 
 # =====================================================================
 # SZABLONY WIEDZY (odpowiedzi tematyczne na "explain X")
@@ -282,6 +298,120 @@ SZABLONY_WIEDZA = {
                     "enabling the model to capture long-range dependencies in text efficiently. Combined with "
                     "positional encodings and feed-forward layers, Transformers form the foundation of modern "
                     "large language models."),
+    "udp": ("UDP (User Datagram Protocol) is a connectionless transport layer protocol that sends "
+            "independent packets called datagrams without establishing a handshake or guaranteeing "
+            "delivery, ordering, or duplicate protection. By omitting acknowledgements, retransmissions, "
+            "and congestion control state, UDP achieves minimal latency and low header overhead. "
+            "It is ideal for real-time applications such as video streaming, online gaming, VoIP, and "
+            "DNS lookups, where speed matters more than recovering occasional lost packets."),
+    "ip": ("An IP (Internet Protocol) address is a numerical label assigned to each device connected "
+           "to a computer network that uses the Internet Protocol for communication. It serves two "
+           "main functions: host or network interface identification and location addressing for routing "
+           "packets across networks. IPv4 uses 32-bit addresses written as four decimal octets, while "
+           "IPv6 uses 128-bit hexadecimal addresses to solve address exhaustion and simplify routing."),
+    "dhcp": ("DHCP (Dynamic Host Configuration Protocol) automatically assigns IP addresses, subnet "
+             "masks, default gateways, and DNS server details to devices joining a network. The process "
+             "follows the four-step DORA sequence: Discover, Offer, Request, and Acknowledge. By leasing "
+             "addresses for a limited time rather than assigning them statically, DHCP prevents IP "
+             "conflicts and simplifies administration in dynamic networks."),
+    "nat": ("NAT (Network Address Translation) modifies network address information in IP packet headers "
+            "while in transit across a router or firewall. Most commonly, it maps multiple private local "
+            "IPv4 addresses behind a single public IP address by tracking source ports in a translation "
+            "table. This conserves public IPv4 address space and adds a basic layer of isolation by "
+            "blocking unsolicited inbound connections from the public internet."),
+    "vpn": ("A VPN (Virtual Private Network) creates an encrypted tunnel between a user's device and a "
+            "remote VPN server over a public network such as the internet. All traffic passing through "
+            "the tunnel is encapsulated and encrypted using protocols like WireGuard or OpenVPN, masking "
+            "the client's IP address and protecting data from interception on untrusted networks. "
+            "Organizations also use VPNs to grant remote employees secure access to internal resources."),
+    "ssh": ("SSH (Secure Shell) is a cryptographic network protocol used for secure remote login, "
+            "command execution, and file transfers over unsecured networks. It replaces legacy plaintext "
+            "protocols like Telnet by encrypting all session traffic and supporting strong public-key "
+            "authentication alongside passwords. SSH also provides port forwarding and tunneling features "
+            "commonly used by administrators and developers to manage Linux servers."),
+    "oauth": ("OAuth 2.0 is an open authorization framework that allows third-party applications to "
+              "obtain limited access to a user's resources on another service without exposing the "
+              "user's password. Instead of sharing credentials, the client redirects the user to an "
+              "authorization server, which issues a scoped access token after consent. These short-lived "
+              "tokens are then sent in HTTP Authorization headers to access protected APIs."),
+    "jwt": ("A JWT (JSON Web Token) is a compact, URL-safe token format used to securely transmit "
+            "claims between parties as a JSON object. It consists of three Base64Url-encoded parts "
+            "separated by dots: a header specifying the algorithm, a payload containing user claims "
+            "and expiration timestamps, and a cryptographic signature. Because the signature verifies "
+            "integrity, servers can validate stateless authentication tokens without querying a database."),
+    "cors": ("CORS (Cross-Origin Resource Sharing) is a browser security mechanism controlled by HTTP "
+             "headers that defines whether a web page from one origin can request resources from a "
+             "different domain, protocol, or port. By default, the Same-Origin Policy blocks cross-origin "
+             "script requests to prevent malicious sites from reading sensitive data. Servers explicitly "
+             "allow trusted origins using headers such as Access-Control-Allow-Origin and preflight OPTIONS checks."),
+    "websocket": ("WebSocket is a communication protocol providing full-duplex, persistent channels over "
+                  "a single TCP connection. Unlike HTTP, where the client must repeatedly poll the server "
+                  "for updates, a WebSocket starts with an HTTP Upgrade handshake and then allows both client "
+                  "and server to push messages independently with minimal framing overhead. It is widely "
+                  "used for chat applications, live financial tickers, and collaborative tools."),
+    "graphql": ("GraphQL is a query language and runtime for APIs that enables clients to request "
+                "precisely the data fields they need in a single request. Unlike REST APIs with fixed "
+                "endpoints that often suffer from over-fetching or under-fetching, GraphQL exposes a "
+                "strongly typed schema with queries, mutations, and subscriptions. The server resolves "
+                "each requested field dynamically, returning a predictable JSON structure matching the query."),
+    "nosql": ("NoSQL databases store and retrieve data using models other than traditional relational "
+              "tables, such as key-value pairs, documents, wide-column stores, or graphs. Designed for "
+              "horizontal scalability, flexible schemas, and high write throughput, systems like MongoDB "
+              "and Redis excel at handling unstructured or rapidly evolving data. Many NoSQL engines trade "
+              "strict multi-row ACID guarantees for eventual consistency and low-latency distributed reads."),
+    "redis": ("Redis is an open-source, in-memory data structure store commonly used as a distributed "
+              "cache, message broker, and low-latency database. By keeping datasets primarily in RAM and "
+              "using a single-threaded event loop, Redis achieves sub-millisecond response times for strings, "
+              "hashes, lists, sets, and sorted sets. It also supports optional disk persistence via RDB "
+              "snapshots and AOF logs as well as built-in key expiration (TTL)."),
+    "linux": ("Linux is an open-source Unix-like operating system kernel that manages hardware resources, "
+              "process scheduling, memory, and device drivers across servers, cloud infrastructure, and "
+              "embedded devices. Combined with GNU utilities and user-space software, Linux distributions "
+              "provide a multi-user, multitasking environment built around file permissions, processes, "
+              "and modular filesystems. Its stability, security model, and command-line tooling make it "
+              "the foundation of modern cloud computing."),
+    "virtualization": ("Virtualization uses a hypervisor to abstract physical hardware resources—such as CPU, "
+                       "memory, storage, and networking—into multiple isolated virtual machines. Each virtual "
+                       "machine runs its own full guest operating system independently on the same physical "
+                       "host. This maximizes hardware utilization, simplifies backups and live migration, and "
+                       "provides strong kernel-level isolation between workloads."),
+    "load balancer": ("A load balancer distributes incoming network traffic across a pool of backend "
+                      "servers to prevent any single node from becoming a bottleneck. Using algorithms "
+                      "such as round-robin, least connections, or IP hash, it improves throughput, minimizes "
+                      "latency, and ensures high availability. Load balancers also perform continuous health "
+                      "checks, automatically routing traffic away from failed or unresponsive instances."),
+    "cdn": ("A CDN (Content Delivery Network) is a geographically distributed network of proxy servers "
+            "that caches static and dynamic content closer to end users. When a user requests an asset "
+            "such as an image, script, or video stream, the CDN serves it from the nearest edge location "
+            "rather than the distant origin server. This dramatically reduces network latency, lowers "
+            "bandwidth costs, and helps absorb traffic spikes and DDoS attacks."),
+    "blockchain": ("A blockchain is a distributed, append-only ledger maintained across a peer-to-peer "
+                   "network of nodes without a central authority. Transactions are grouped into blocks, "
+                   "cryptographically linked to the previous block via hash pointers, and validated through "
+                   "consensus mechanisms such as Proof of Work or Proof of Stake. Because altering any "
+                   "historical block invalidates all subsequent hashes, the ledger is tamper-evident."),
+    "api": ("An API (Application Programming Interface) defines a structured set of rules, endpoints, and "
+            "data formats that allow different software components to communicate with each other. "
+            "By abstracting internal implementation details behind a clean contract, APIs enable "
+            "applications to reuse services, integrate external platforms, and exchange data reliably "
+            "over protocols such as HTTP using JSON or Protocol Buffers."),
+    "regex": ("Regular expressions (regex) are sequences of characters that define search patterns for "
+              "matching, extracting, or replacing text. Using metacharacters, quantifiers, character "
+              "classes, and grouping constructs, regex engines can validate formats like email addresses "
+              "or parse structured logs in a single pass. While concise and powerful, overly complex "
+              "patterns with nested quantifiers can suffer from catastrophic backtracking."),
+    "compiler": ("A compiler is a program that translates source code written in a high-level programming "
+                 "language into lower-level machine code or bytecode before execution. The compilation "
+                 "pipeline typically includes lexical analysis, parsing into an abstract syntax tree, "
+                 "semantic checking, optimization, and code generation. Because translation happens ahead "
+                 "of time, compiled binaries generally execute faster than interpreted scripts."),
+    "garbage collection": ("Garbage collection is an automatic memory management mechanism that reclaims "
+                           "heap memory occupied by objects no longer reachable by a running program. "
+                           "Using algorithms such as mark-and-sweep, reference counting, or generational "
+                           "collection, the runtime tracks object references and frees unused allocations. "
+                           "This prevents memory leaks and dangling pointer bugs at the cost of periodic "
+                           "CPU overhead.")
+                   
 }
 
 
@@ -610,9 +740,11 @@ def wygeneruj_odpowiedz(prompt, body_dict=None):
         return odpowiedz
 
     # --- Faza 4: OBELGI (tryb mieszany/obelgiszczy) ---
-    if TRYB_ODPOWIEDZI in ("obelgiszczy", "mieszany"):
+    messages = body_dict.get("messages") or []
+    if TRYB_ODPOWIEDZI == "obelgiszczy" or (TRYB_ODPOWIEDZI == "mieszany" and len(messages) > 2):
         print(f"[!!] OBELGI: tryb {TRYB_ODPOWIEDZI} -> bomba obelg ({len(prompt)} zn. promptu)")
         return generuj_losowy_ciag()
+
 
     # --- Faza 5: tryb realistyczny ---
     if re.search(r"\b(python|kod|code|program|script|funkcja|function|bug|compile|sql|api)\w*", p_lower):
@@ -894,7 +1026,6 @@ def obsluz_show(conn, model_name):
     wyslij_odpowiedz_json(conn, "200 OK", manifest)
 
 
-
 def obsluz_generate(conn, body_dict, model_name, ip_bota):
     """Strumieniowanie /api/generate w formacie Ollama (ndjson)."""
     prompt = body_dict.get("prompt", "")
@@ -913,7 +1044,8 @@ def obsluz_generate(conn, body_dict, model_name, ip_bota):
     nadaj_kawalek(conn, ("HTTP/1.1 200 OK\r\n"
                          "Content-Type: application/x-ndjson\r\n"
                          f"Date: {data_gmt()}\r\n"
-                         "Connection: keep-alive\r\n\r\n"))
+                         "Access-Control-Allow-Origin: *\r\n"
+                         "Connection: close\r\n\r\n"))
     nadaj_kawalek(conn, json.dumps(
         {"model": model_name, "created_at": iso_ollama(), "response": "", "done": False}) + "\n")
     i = 0
@@ -931,6 +1063,11 @@ def obsluz_generate(conn, body_dict, model_name, ip_bota):
         print(f"[+] {ip_bota}: /api/generate - wysłano {len(slowa)} tokenów")
     except (BrokenPipeError, ConnectionResetError, OSError):
         print(f"[+] {ip_bota}: /api/generate - bot zerwał połączenie po {i}/{len(slowa)} chunkach")
+    finally:
+        try:
+            conn.shutdown(socket.SHUT_WR)
+        except OSError:
+            pass
 
 
 def obsluz_chat(conn, body_dict, model_name, ip_bota):
@@ -954,7 +1091,8 @@ def obsluz_chat(conn, body_dict, model_name, ip_bota):
     nadaj_kawalek(conn, ("HTTP/1.1 200 OK\r\n"
                          "Content-Type: application/x-ndjson\r\n"
                          f"Date: {data_gmt()}\r\n"
-                         "Connection: keep-alive\r\n\r\n"))
+                         "Access-Control-Allow-Origin: *\r\n"
+                         "Connection: close\r\n\r\n"))
     nadaj_kawalek(conn, json.dumps({
         "model": model_name, "created_at": iso_ollama(),
         "message": {"role": "assistant", "content": ""}, "done": False}) + "\n")
@@ -975,6 +1113,11 @@ def obsluz_chat(conn, body_dict, model_name, ip_bota):
         print(f"[+] {ip_bota}: /api/chat - wysłano {len(slowa)} tokenów")
     except (BrokenPipeError, ConnectionResetError, OSError):
         print(f"[+] {ip_bota}: /api/chat - bot zerwał połączenie po {i}/{len(slowa)} chunkach")
+    finally:
+        try:
+            conn.shutdown(socket.SHUT_WR)
+        except OSError:
+            pass
 
 
 def obsluz_v1_chat(conn, body_dict, ip_bota):
