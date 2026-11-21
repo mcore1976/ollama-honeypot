@@ -655,14 +655,18 @@ def dopasuj_probe(prompt, body_dict=None):
         return m.group(1).strip(), "valid-answer-echo"
 
 
-    # 5) Proste działania matematyczne (np. "calculate 2+2", "What is 1234*5678?", "10 multiplied by 5")
-    m = re.search(r"(\d+)\s*(\+|\-|\*|\/|x|multiplied\s+by|divided\s+by|plus|minus)\s*(\d+)", p, re.I)
+    # 5) Proste działania matematyczne (całkowite i ułamki)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(\+|\-|\*|\/|x|multiplied\s+by|divided\s+by|plus|minus)\s*(\d+(?:\.\d+)?)", p, re.I)
     if m and not re.search(r"\d{4}-\d{2}-\d{2}", p):
-        a, op, b = int(m.group(1)), m.group(2).lower(), int(m.group(3))
-        if op in ("+", "plus"): return str(a + b), "math"
-        if op in ("-", "minus"): return str(a - b), "math"
-        if op in ("*", "x") or "multiplied" in op: return str(a * b), "math"
-        if (op == "/" or "divided" in op) and b != 0: return str(a // b if a % b == 0 else round(a / b, 4)), "math"
+        a, op, b = float(m.group(1)), m.group(2).lower(), float(m.group(3))
+        wynik = None
+        if op in ("+", "plus"): wynik = a + b
+        elif op in ("-", "minus"): wynik = a - b
+        elif op in ("*", "x") or "multiplied" in op: wynik = a * b
+        elif (op == "/" or "divided" in op) and b != 0: wynik = a / b
+        if wynik is not None:
+            return (str(int(wynik)) if wynik.is_integer() else str(round(wynik, 6))), "math"
+
 
     return None, None
 
