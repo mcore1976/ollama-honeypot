@@ -803,36 +803,43 @@ def ekstrakuj_tool_call(body_dict, prompt):
     if not kandydaci:
         return None
 
-    func = kandydaci[0]
-    if len(kandydaci) > 1:
-        STOP_WORDS = {
-            "get", "set", "check", "find", "fetch", "list", "show",
-            "read", "current", "from", "with", "that", "this", "into", "user"
-        }
-        najlepszy_wynik = -1
-        for f in kandydaci:
-            score = 0
-            fname = f["name"].lower()
-            fdesc = (f.get("description") or "").lower()
+    STOP_WORDS = {
+        "get", "set", "check", "find", "fetch", "list", "show",
+        "read", "current", "from", "with", "that", "this", "into", "user"
+    }
+    func = None
+    najlepszy_wynik = 0
 
-            # Pełna nazwa funkcji w prompcie (np. "getweather" lub "get_weather")
-            if fname in p_lower:
-                score += 15
+    for f in kandydaci:
+        score = 0
+        fname = f["name"].lower()
+        fdesc = (f.get("description") or "").lower()
 
-            # Rozbicie nazwy po "_" oraz camelCase (np. "getWeather" -> ["get", "weather"])
-            rozbita_nazwa = re.sub(r"([a-z])([A-Z])", r"\1_\2", f["name"]).lower().split("_")
-            for czesc in rozbita_nazwa:
-                if len(czesc) >= 3 and czesc not in STOP_WORDS and czesc in p_lower:
-                    score += 10
+        # Pełna nazwa funkcji w prompcie (np. "getweather" lub "get_weather")
+        if fname in p_lower:
+            score += 15
 
-            # Dopasowanie słów kluczowych z opisu funkcji (bez pospolitych czasowników)
-            for slowo in re.findall(r"[a-z]{4,}", fdesc):
-                if slowo not in STOP_WORDS and slowo in p_lower:
-                    score += 2
+        # Rozbicie nazwy po "_" oraz camelCase (np. "getWeather" -> ["get", "weather"])
+        rozbita_nazwa = re.sub(r"([a-z])([A-Z])", r"\1_\2", f["name"]).lower().split("_")
+        for czesc in rozbita_nazwa:
+            if len(czesc) >= 3 and czesc not in STOP_WORDS and czesc in p_lower:
+                score += 10
 
-            if score > najlepszy_wynik:
-                najlepszy_wynik = score
-                func = f
+        # Dopasowanie słów kluczowych z opisu funkcji (bez pospolitych czasowników)
+        for slowo in re.findall(r"[a-z]{4,}", fdesc):
+            if slowo not in STOP_WORDS and slowo in p_lower:
+                score += 2
+
+        if score > najlepszy_wynik:
+            najlepszy_wynik = score
+            func = f
+
+    if func is None:
+        if len(kandydaci) == 1 and kandydaci[0]["name"] != "get_current_timestamp":
+            func = kandydaci[0]
+        else:
+            return None
+
 
     nazwa = func["name"]
     nazwa_lower = nazwa.lower()
