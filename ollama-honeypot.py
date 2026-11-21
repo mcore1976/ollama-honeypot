@@ -1225,7 +1225,6 @@ def obsluz_chat(conn, body_dict, model_name, ip_bota):
             pass
 
 
-
 def obsluz_v1_chat(conn, body_dict, ip_bota):
     """OpenAI /v1/chat/completions – tool calling, stream (SSE), include_usage."""
     model_name = body_dict.get("model") or FAKE_MODELS[0]["name"]
@@ -1238,7 +1237,18 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
     # ================= TOOL CALLING =================
     if body_dict.get("tools") and len(prompt_do_matchowania) < 2000:
         tool_msgs = [m for m in messages if m.get("role") == "tool"]
-        if tool_msgs:
+        dostepne_nazwy = {
+            t["function"]["name"] for t in (body_dict.get("tools") or [])
+            if isinstance(t, dict) and isinstance(t.get("function"), dict) and t["function"].get("name")
+        }
+
+        # Specjalna sekwencja dla agentów kodujących (np. pi: read, bash, edit, write)
+        p_low_all = prompt.lower()
+        czy_pi_stats = {"read", "bash"}.issubset(dostepne_nazwy) and "stats.py" in p_low_all
+        czy_pi_rollup = {"read", "bash"}.issubset(dostepne_nazwy) and "rollup.py" in p_low_all
+        czy_agent_pi = czy_pi_stats or czy_pi_rollup
+
+        if tool_msgs and not czy_agent_pi:
             wynik = str(tool_msgs[-1].get("content", "")).strip()
             if wynik:
                 print(f"[!] TOOL-RESULT od {ip_bota}: oddajemy: {wynik!r}")
@@ -1253,7 +1263,116 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                               "total_tokens": max(len(prompt.split()) + len(wynik.split()), 2)}
                 })
                 return
-        tool_call = ekstrakuj_tool_call(body_dict, prompt_do_matchowania)
+
+        tool_call = None
+        if czy_agent_pi:
+            krok = len(tool_msgs)
+            ostatni_wynik = str(tool_msgs[-1].get("content", "")) if tool_msgs else ""
+            if ostatni_wynik:
+                print(f"[!] PI-AGENT KROK {krok} wynik od {ip_bota}: {ostatni_wynik[:120]!r}...")
+
+            def _zbuduj_call(fn_name, args_obj):
+                return {
+                    "id": losowy_id("call_"),
+                    "type": "function",
+                    "function": {"name": fn_name, "arguments": json.dumps(args_obj, separators=(",", ":"))}
+                }
+
+            raport = None
+            if czy_pi_stats:
+                if krok == 0:
+                    tool_call = _zbuduj_call("read", {"path": "stats.py"})
+                elif krok == 1:
+                    tool_call = _zbuduj_call("read", {"path": "test_stats.py"})
+                elif krok == 2:
+                    tool_call = _zbuduj_call("bash", {"command": "python3 -m unittest"})
+                elif krok == 3 and ("write" in dostepne_nazwy or "edit" in dostepne_nazwy):
+                    naprawiony_kod = (
+                        'def summarize(records):\n'
+                        '    """Return successes, failures and mean successful latency in milliseconds."""\n'
+                        '    successful = [r for r in records if 200 <= r["status"] <= 299]\n'
+                        '    failures = len(records) - len(successful)\n'
+                        '    mean_ms = sum(r["latency_ms"] for r in successful) / len(successful) if successful else 0\n'
+                        '    return {"successes": len(successful), "failures": failures, "mean_ms": mean_ms}\n'
+                    )
+                    tool_call = _zbuduj_call("write", {"path": "stats.py", "content": naprawiony_kod})
+                elif krok == 4:
+                    tool_call = _zbuduj_call("bash", {"command": "python3 -m unittest"})
+                else:
+                    raport = "Fixed status filtering (200-299), failure counting, and zero-safe mean latency calculation in stats.py. All tests pass."
+
+            elif czy_pi_rollup:
+                if krok == 0:
+                    tool_call = _zbuduj_call("read", {"path": "README.md"})
+                elif krok == 1 and "write" in dostepne_nazwy:
+                    kod_rollup = (
+                        'import sys\n'
+                        'import json\n\n'
+                        'def main():\n'
+                        '    totals = {}\n'
+                        '    for idx, line in enumerate(sys.stdin, start=1):\n'
+                        '        stripped = line.strip()\n'
+                        '        if not stripped:\n'
+                        '            continue\n'
+                        '        try:\n'
+                        '            obj = json.loads(stripped)\n'
+                        '        except Exception:\n'
+                        '            sys.stderr.write(f"Invalid JSON on line {idx}\\n")\n'
+                        '            sys.exit(2)\n'
+                        '        if not isinstance(obj, dict):\n'
+                        '            sys.stderr.write(f"Invalid record on line {idx}\\n")\n'
+                        '            sys.exit(2)\n'
+                        '        cust = obj.get("customer")\n'
+                        '        amt = obj.get("amount_cents")\n'
+                        '        if not isinstance(cust, str) or not cust:\n'
+                        '            sys.stderr.write(f"Invalid customer on line {idx}\\n")\n'
+                        '            sys.exit(2)\n'
+                        '        if isinstance(amt, bool) or not isinstance(amt, int) or amt < 0:\n'
+                        '            sys.stderr.write(f"Invalid amount_cents on line {idx}\\n")\n'
+                        '            sys.exit(2)\n'
+                        '        totals[cust] = totals.get(cust, 0) + amt\n'
+                        '    sorted_totals = {k: totals[k] for k in sorted(totals.keys())}\n'
+                        '    sys.stdout.write(json.dumps(sorted_totals) + "\\n")\n\n'
+                        'if __name__ == "__main__":\n'
+                        '    main()\n'
+                    )
+                    tool_call = _zbuduj_call("write", {"path": "rollup.py", "content": kod_rollup})
+                elif krok == 2:
+                    tool_call = _zbuduj_call("bash", {"command": "ls -la && python3 -m unittest"})
+                else:
+                    raport = "Implemented rollup.py using Python standard library with strict validation, 1-based line error diagnostics on stderr (exit 2), and lexicographically sorted JSON output."
+
+            if raport is not None:
+                print(f"[!] PI-AGENT ZAKOŃCZONY dla {ip_bota}")
+                if body_dict.get("stream", False):
+                    conn.settimeout(None)
+                    try:
+                        nadaj_kawalek(conn, ("HTTP/1.1 200 OK\r\n"
+                                             "Content-Type: text/event-stream\r\n"
+                                             f"Date: {data_gmt()}\r\n"
+                                             "Cache-Control: no-cache\r\n"
+                                             "Connection: keep-alive\r\n\r\n"))
+                        nadaj_kawalek(conn, "data: " + json.dumps({
+                            "id": id_cmpl, "object": "chat.completion.chunk",
+                            "created": created, "model": model_name,
+                            "choices": [{"index": 0, "delta": {"role": "assistant", "content": raport}, "finish_reason": "stop"}]
+                        }) + "\r\n\r\n")
+                        nadaj_kawalek(conn, "data: [DONE]\r\n\r\n")
+                    except (BrokenPipeError, ConnectionResetError, OSError):
+                        pass
+                else:
+                    wyslij_odpowiedz_json(conn, "200 OK", {
+                        "id": id_cmpl, "object": "chat.completion",
+                        "created": created, "model": model_name,
+                        "choices": [{"index": 0,
+                                     "message": {"role": "assistant", "content": raport},
+                                     "finish_reason": "stop"}],
+                        "usage": {"prompt_tokens": 50, "completion_tokens": 20, "total_tokens": 70}
+                    })
+                return
+        else:
+            tool_call = ekstrakuj_tool_call(body_dict, prompt_do_matchowania)
+
         if tool_call:
             print(f"[!] TOOL-CALL od {ip_bota}: {tool_call['function']['name']}({tool_call['function']['arguments']})")
             if body_dict.get("stream", False):
@@ -1293,6 +1412,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                               "total_tokens": max(len(prompt.split()) + len(args_json.split()), 2)}
                 })
             return
+
 
     # ================= Normalny tryb / OBELGI =================
     odpowiedz = wygeneruj_odpowiedz(prompt_do_matchowania, body_dict)
