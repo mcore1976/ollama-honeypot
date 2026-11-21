@@ -906,7 +906,10 @@ def ekstrakuj_tool_call(body_dict, prompt):
                 czysty = re.sub(r'^(?:please\s+)?(?:search|find|look\s+up|google|query)\s+(?:for\s+)?', '', p, flags=re.I)
                 czysty = re.sub(r'\s*call\s+the\s+.*$', '', czysty, flags=re.I).strip(" ?.!")
                 args[klucz] = czysty[:80] if czysty else "latest news"
-
+                
+        elif typ == "object":
+            args[klucz] = {"key": "value"}
+            
         else:
             # Ogólny string (np. wyrazenie matematyczne "2 + 2" w kalkulatorze stringowym)
             if cudzyslowy:
@@ -919,7 +922,8 @@ def ekstrakuj_tool_call(body_dict, prompt):
             elif miasta:
                 args[klucz] = miasta[0].strip()
             else:
-                args[klucz] = "test"
+#                args[klucz] = "test"
+                args[klucz] = f"sample_{klucz}"                
 
     return {
         "id": "call_" + "".join(random.choices(string.ascii_lowercase + string.digits, k=24)),
@@ -1139,7 +1143,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
     created = int(time.time())
 
     # ================= TOOL CALLING =================
-    if body_dict.get("tools") and len(prompt_do_matchowania) < 200:
+    if body_dict.get("tools") and len(prompt_do_matchowania) < 2000:
         tool_msgs = [m for m in messages if m.get("role") == "tool"]
         if tool_msgs:
             wynik = str(tool_msgs[-1].get("content", "")).strip()
