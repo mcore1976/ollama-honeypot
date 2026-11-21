@@ -784,7 +784,6 @@ def wygeneruj_odpowiedz(prompt, body_dict=None):
             limit = max_tokens
     return obcinaj_do_tokenow(odpowiedz, limit)
 
-
 def ekstrakuj_tool_call(body_dict, prompt):
     """Buduje wiarygodny OpenAI function call dla najpopularniejszych narzędzi LLM."""
     tools = body_dict.get("tools") or []
@@ -806,18 +805,31 @@ def ekstrakuj_tool_call(body_dict, prompt):
 
     func = kandydaci[0]
     if len(kandydaci) > 1:
+        STOP_WORDS = {
+            "get", "set", "check", "find", "fetch", "list", "show",
+            "read", "current", "from", "with", "that", "this", "into", "user"
+        }
         najlepszy_wynik = -1
         for f in kandydaci:
             score = 0
             fname = f["name"].lower()
             fdesc = (f.get("description") or "").lower()
-            # Jeśli nazwa funkcji jest wprost w prompcie (np. "Call get_weather")
+
+            # Pełna nazwa funkcji w prompcie (np. "getweather" lub "get_weather")
             if fname in p_lower:
-                score += 10
-            # Dopasowanie słów kluczowych z opisu funkcji do promptu
-            for slowo in re.findall(r"[a-z]{4,}", fname + " " + fdesc):
-                if slowo in p_lower:
-                    score += 1
+                score += 15
+
+            # Rozbicie nazwy po "_" oraz camelCase (np. "getWeather" -> ["get", "weather"])
+            rozbita_nazwa = re.sub(r"([a-z])([A-Z])", r"\1_\2", f["name"]).lower().split("_")
+            for czesc in rozbita_nazwa:
+                if len(czesc) >= 3 and czesc not in STOP_WORDS and czesc in p_lower:
+                    score += 10
+
+            # Dopasowanie słów kluczowych z opisu funkcji (bez pospolitych czasowników)
+            for slowo in re.findall(r"[a-z]{4,}", fdesc):
+                if slowo not in STOP_WORDS and slowo in p_lower:
+                    score += 2
+
             if score > najlepszy_wynik:
                 najlepszy_wynik = score
                 func = f
@@ -1098,11 +1110,61 @@ def obsluz_generate(conn, body_dict, model_name, ip_bota):
 
 
 def obsluz_chat(conn, body_dict, model_name, ip_bota):
-    """Strumieniowanie /api/chat w formacie Ollama."""
+    """Strumieniowanie /api/chat w formacie Ollama (z obsługą tool calls)."""
     stream = body_dict.get("stream", True)
     messages = [m for m in body_dict.get("messages", []) if isinstance(m, dict)]
     prompt = wytnij_prompt(messages)
     prompt_do_matchowania = ostatnia_replika(messages, "user") or prompt
+
+    # ================= TOOL CALLING (NATYWNA OLLAMA) =================
+    if body_dict.get("tools") and len(prompt_do_matchowania) < 2000:
+        # 1. Druga tura: klient odesłał wynik działania narzędzia (role: tool)
+        tool_msgs = [m for m in messages if m.get("role") == "tool"]
+        if tool_msgs:
+            wynik = str(tool_msgs[-1].get("content", "")).strip()
+            if wynik:
+                print(f"[!] OLLAMA TOOL-RESULT od {ip_bota}: oddajemy: {wynik!r}")
+                stat = losowe_statystyki(len(wynik.split()), prompt)
+                odp_json = {
+                    "model": model_name, "created_at": iso_ollama(),
+                    "message": {"role": "assistant", "content": wynik},
+                    "done": True, **stat
+                }
+                if stream:
+                    nadaj_kawalek(conn, ("HTTP/1.1 200 OK\r\nContent-Type: application/x-ndjson\r\n"
+                                         f"Date: {data_gmt()}\r\nAccess-Control-Allow-Origin: *\r\n"
+                                         "Connection: close\r\n\r\n"))
+                    nadaj_kawalek(conn, json.dumps(odp_json) + "\n")
+                else:
+                    wyslij_odpowiedz_json(conn, "200 OK", odp_json)
+                return
+
+        # 2. Pierwsza tura: generujemy wywołanie narzędzia z istniejącej funkcji
+        tool_call = ekstrakuj_tool_call(body_dict, prompt_do_matchowania)
+        if tool_call:
+            nazwa_fn = tool_call["function"]["name"]
+            args_dict = json.loads(tool_call["function"]["arguments"])
+            print(f"[!] OLLAMA TOOL-CALL od {ip_bota}: {nazwa_fn}({args_dict})")
+
+            stat = losowe_statystyki(5, prompt)
+            odp_json = {
+                "model": model_name, "created_at": iso_ollama(),
+                "message": {
+                    "role": "assistant", "content": "",
+                    "tool_calls": [{"function": {"name": nazwa_fn, "arguments": args_dict}}]
+                },
+                "done": True, **stat
+            }
+            if stream:
+                nadaj_kawalek(conn, ("HTTP/1.1 200 OK\r\nContent-Type: application/x-ndjson\r\n"
+                                     f"Date: {data_gmt()}\r\nAccess-Control-Allow-Origin: *\r\n"
+                                     "Connection: close\r\n\r\n"))
+                nadaj_kawalek(conn, json.dumps(odp_json) + "\n")
+            else:
+                wyslij_odpowiedz_json(conn, "200 OK", odp_json)
+            return
+    # =================================================================
+
     odpowiedz = wygeneruj_odpowiedz(prompt_do_matchowania, body_dict)
     slowa = odpowiedz.split(" ")
     if not stream:
@@ -1145,6 +1207,7 @@ def obsluz_chat(conn, body_dict, model_name, ip_bota):
             conn.shutdown(socket.SHUT_WR)
         except OSError:
             pass
+
 
 
 def obsluz_v1_chat(conn, body_dict, ip_bota):
