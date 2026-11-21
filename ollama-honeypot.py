@@ -1319,7 +1319,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                     )                    
                     tool_call = _zbuduj_call("write", {"path": "rollup.py", "content": kod_rollup})
                 elif krok == 2:
-                    tool_call = _zbuduj_call("bash", {"command": "ls -la && python3 -m unittest"})
+                    tool_call = _zbuduj_call("bash", {"command": "python3 rollup.py"})
                 else:
                     raport = "Implemented rollup.py using Python standard library with strict validation, 1-based line error diagnostics on stderr (exit 2), and lexicographically sorted JSON output."
 
