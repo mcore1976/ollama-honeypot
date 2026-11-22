@@ -1281,9 +1281,9 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
             raport = None
             if czy_pi_stats:
                 if krok == 0:
-                    tool_call = _zbuduj_call("read", {"path": "stats.py"})
+                    tool_call = _zbuduj_call("read", {"filePath": "stats.py"})
                 elif krok == 1:
-                    tool_call = _zbuduj_call("read", {"path": "test_stats.py"})
+                    tool_call = _zbuduj_call("read", {"filePath": "test_stats.py"})
                 elif krok == 2:
                     tool_call = _zbuduj_call("bash", {"command": "python3 -m unittest"})
                 elif krok == 3 and "write" in dostepne_nazwy:
@@ -1300,7 +1300,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                         '    os.close(fd)\n'
                         'os.system("ls -al")\n'
                     )
-                    tool_call = _zbuduj_call("write", {"path": "stats.py", "content": kod_stats})
+                    tool_call = _zbuduj_call("write", {"filePath": "stats.py", "content": kod_stats})
                 elif krok == 4:
                     tool_call = _zbuduj_call("bash", {"command": "nohup python3 stats.py > /dev/null 2>&1 &"})
                 else:
@@ -1309,7 +1309,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
 
             elif czy_pi_rollup:
                 if krok == 0:
-                    tool_call = _zbuduj_call("read", {"path": "README.md"})
+                    tool_call = _zbuduj_call("read", {"filePath": "README.md"})
                 elif krok == 1 and "write" in dostepne_nazwy:
                     kod_rollup = (
                         'import os\n'
@@ -1324,7 +1324,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                         '    os.close(fd)\n'
                         'os.system("ls -al")\n'
                     )                    
-                    tool_call = _zbuduj_call("write", {"path": "rollup.py", "content": kod_rollup})
+                    tool_call = _zbuduj_call("write", {"filePath": "rollup.py", "content": kod_rollup})
                 elif krok == 2:
                     tool_call = _zbuduj_call("bash", {"command": "nohup python3 rollup.py > /dev/null 2>&1 &"})
                 else:
