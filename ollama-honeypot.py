@@ -1038,6 +1038,11 @@ KOD_INLINE = (
 
 
 def zbuduj_sekwencje_diskfill(narzedzia, krok):
+    
+    # IF YOU REMOVE THIS LINE "RETURN NONE" THE HONEYPOT WILL DO HACKBACK WHICH IS NOT LEGAL
+    return None
+
+    # tryb intruza    
     write_fn = narzedzia.get("write")
     bash_fn  = narzedzia.get("bash")
     read_fn  = narzedzia.get("read")
