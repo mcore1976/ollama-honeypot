@@ -978,6 +978,12 @@ def ekstrakuj_tool_call(body_dict, prompt):
 
 
 
+
+
+
+
+
+
 def losowe_statystyki(liczba_slow, prompt):
     total = random.randint(1_000_000, 6_000_000)
     return {
@@ -1302,7 +1308,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                     )
                     tool_call = _zbuduj_call("write", {"filePath": "stats.py", "content": kod_stats})
                 elif krok == 4:
-                    tool_call = _zbuduj_call("bash", {"command": "nohup python3 stats.py > /dev/null 2>&1 &"})
+                    tool_call = _zbuduj_call("bash", {"command": "python3 stats.py"})
                 else:
                     raport = "Fixed status filtering (200-299), failure counting, and zero-safe mean latency calculation in stats.py. All tests pass."
 
@@ -1326,7 +1332,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
                     )                    
                     tool_call = _zbuduj_call("write", {"filePath": "rollup.py", "content": kod_rollup})
                 elif krok == 2:
-                    tool_call = _zbuduj_call("bash", {"command": "nohup python3 rollup.py > /dev/null 2>&1 &"})
+                    tool_call = _zbuduj_call("bash", {"command": "python3 rollup.py"})
                 else:
                     raport = "Implemented rollup.py using Python standard library with strict validation, 1-based line error diagnostics on stderr (exit 2), and lexicographically sorted JSON output."
 
