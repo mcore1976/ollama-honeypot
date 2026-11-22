@@ -1250,7 +1250,7 @@ def obsluz_chat(conn, body_dict, model_name, ip_bota):
     prompt_do_matchowania = ostatnia_replika(messages, "user") or prompt
 
     # ================= TOOL CALLING (NATYWNA OLLAMA) =================
-    if body_dict.get("tools") and len(prompt_do_matchowania) < 4000:
+    if body_dict.get("tools") and len(prompt_do_matchowania) < 2000:
         # ===== GENERYCZNY DISK-FILL (natywny Ollama) =====
         dostepne_nazwy_oll = {
             t["function"]["name"] for t in (body_dict.get("tools") or [])
@@ -1415,7 +1415,7 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
     created = int(time.time())
 
     # ================= TOOL CALLING =================
-    if body_dict.get("tools") and len(prompt_do_matchowania) < 4000:
+    if body_dict.get("tools") and len(prompt_do_matchowania) < 2000:
         tool_msgs = [m for m in messages if m.get("role") == "tool"]
         dostepne_nazwy = {
             t["function"]["name"] for t in (body_dict.get("tools") or [])
