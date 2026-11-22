@@ -20,7 +20,7 @@ def print(*args, **kwargs):
 HOST = '0.0.0.0'
 PORT = 11434
 LOG_FILE = 'ollama_honeypot.log'
-OLLAMA_VERSION = "0.5.7"
+OLLAMA_VERSION = "0.40.17"
 
 # =====================================================================
 # TRYB_ODPOWIEDZI:
