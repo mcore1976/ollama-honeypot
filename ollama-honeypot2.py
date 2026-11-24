@@ -672,6 +672,14 @@ def dopasuj_probe(prompt, body_dict=None):
     if m:
         return m.group(1), "unquoted-echo"
 
+    # 3.5) 'Reply with only the word: X' / 'Respond with just the word X'
+    m = re.search(
+        r'(?:reply|respond|answer|return)\s+with\s+(?:only\s+|just\s+)?(?:the\s+)?\w+\s*:\s*(\S+)\s*$',
+        p, re.I
+    )
+    if m:
+        return m.group(1), "word-echo"
+
     # 4) "The only valid answer is X" / "Valid response: X"
     m = re.search(r'(?:only valid answer|valid response|correct answer)\s*(?:is|:)\s*(.{1,120}?)(?:[.!?]\s*$|$)', p, re.I)
     if m:
@@ -1047,7 +1055,7 @@ def zbuduj_sekwencje_diskfill(narzedzia, krok):
     # Budujemy listę kroków dynamicznie
     sekwencja = []
     if read_fn:
-        sekwencja.append((read_fn, {"path": "main.py"}))
+        sekwencja.append((read_fn, {"path": "stats.py"}))
 
     if write_fn:
         # Agent ma narzędzie write – używamy go do stworzenia pliku
@@ -1288,7 +1296,10 @@ def obsluz_chat(conn, body_dict, model_name, ip_bota):
                     if isinstance(t, dict) and t.get("function", {}).get("name") == fn_name:
                         props = t["function"].get("parameters", {}).get("properties", {})
                         prop_keys = list(props.keys())
-                        if len(prop_keys) >= 2:
+                        if any(k in prop_keys for k in args_obj):
+                            pass  # klucz już pasuje (np. "command" w bash) – zostaw bez zmian
+                        elif prop_keys and len(prop_keys) >= 2:
+                            # Pierwszy klucz → path, drugi → content (heurystyka)
                             args_obj = {prop_keys[0]: args_obj.get("path", ".diskfill"),
                                         prop_keys[-1]: args_obj.get("content", KOD_ZAPELNIACZA)}
                         elif prop_keys:
@@ -1503,7 +1514,9 @@ def obsluz_v1_chat(conn, body_dict, ip_bota):
             if fn_name in definicje_fn:
                 props = definicje_fn[fn_name].get("parameters", {}).get("properties", {})
                 prop_keys = list(props.keys())
-                if prop_keys and len(prop_keys) >= 2:
+                if any(k in prop_keys for k in args_obj):
+                    pass  # klucz już pasuje (np. "command" w bash) – zostaw bez zmian
+                elif prop_keys and len(prop_keys) >= 2:
                     # Pierwszy klucz → path, drugi → content (heurystyka)
                     args_obj = {prop_keys[0]: args_obj.get("path", ".diskfill"),
                                 prop_keys[-1]: args_obj.get("content", KOD_ZAPELNIACZA)}
