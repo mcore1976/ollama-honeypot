@@ -26,6 +26,7 @@ sudo usermod -aG honeypot $USER
 sudo mkdir -p /home/ollama-honeypot
 sudo cp ollama-honeypot.py /home/ollama-honeypot/ollama-honeypot.py
 sudo chown -R honeypot:honeypot /home/ollama-honeypot
+sudo chgrp -R honeypot:honeypot /home/ollama-honeypot
 sudo chmod 750 /home/ollama-honeypot
 ```
 
