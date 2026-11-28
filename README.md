@@ -1,4 +1,4 @@
-This piece of code simulates Ollama server on the port 11434 and tricks most of the bots and even  hackers that are using not properly secured people's  Ollama servers (exposed to the Internet) to boost their autonomous agent used for hacking. 
+This piece of code simulates Ollama server on the port 11434 and tricks most of the bots and even  hackers that are using not properly secured people's  Ollama servers (exposed to the Internet) to boost their autonomous agent used for hacking.  It has a hack-back option to blow hackers agent 
 You can test it by attaching real OpenWebUI to this "server" in Administrative Settings / Connections to see how it performs.
 
 Help protecting the internet! Run the fake Ollama and lure these mtfkrs
